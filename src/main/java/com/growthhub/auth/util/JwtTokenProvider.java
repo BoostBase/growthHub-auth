@@ -34,7 +34,7 @@ public class JwtTokenProvider {
 
     @PostConstruct
     public void setKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecretKey());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.secretKey());
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -44,7 +44,7 @@ public class JwtTokenProvider {
     public String createAccessToken(User user) {
         long now = (new Date()).getTime();
 
-        Date accessValidity = new Date(now + jwtProperties.getAccessTokenExpiration());
+        Date accessValidity = new Date(now + jwtProperties.accessTokenExpiration());
 
         log.info("expire: {}", accessValidity);
 
@@ -53,7 +53,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date(now))
                 .setExpiration(accessValidity)
                 // 토큰을 발급한 주체를 설정
-                .setIssuer(jwtProperties.getIssuer())
+                .setIssuer(jwtProperties.issuer())
                 .setSubject(user.getId().toString())
                 .addClaims(Map.of(USER_ROLE, user.getRole().name()))
                 // 토큰이 JWT 타입 명시
@@ -68,14 +68,14 @@ public class JwtTokenProvider {
     public String createRefreshToken(User user) {
         long now = (new Date()).getTime();
 
-        Date refreshValidity = new Date(now + jwtProperties.getRefreshTokenExpiration());
+        Date refreshValidity = new Date(now + jwtProperties.refreshTokenExpiration());
 
         return Jwts.builder()
                 // 토큰의 발급 시간을 기록
                 .setIssuedAt(new Date(now))
                 .setExpiration(refreshValidity)
                 // 토큰을 발급한 주체를 설정
-                .setIssuer(jwtProperties.getIssuer())
+                .setIssuer(jwtProperties.issuer())
                 .setSubject(user.getId().toString())
                 .addClaims(Map.of(USER_ROLE, user.getRole().name()))
                 // 토큰이 JWT 타입 명시
