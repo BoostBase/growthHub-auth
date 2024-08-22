@@ -14,20 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
 
     @Operation(summary = "테스트용 access token 발급", description = "테스트용 access token 발급")
-    @GetMapping("test/login/{userId}")
+    @GetMapping("/test/login/{userId}")
     public String testToken(@PathVariable Long userId) {
         return authService.testToken(userId);
     }

@@ -8,7 +8,6 @@ import com.growthhub.auth.repository.UserRepository;
 import com.growthhub.auth.util.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,22 +33,12 @@ public class LoginService {
 
         //토큰 생성 후 리턴
         String accessToken = jwtTokenProvider.createAccessToken(user);
-        setRefreshToken(response, user);
+        setRefreshTokenHeader(response, user);
 
         return accessToken;
     }
 
-    private void setRefreshToken(HttpServletResponse response, User user) {
-        String refreshToken = jwtTokenProvider.createRefreshToken(user);
-
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .maxAge(14 * 24 * 60 * 60)
-                .path("/")
-                .secure(true)
-                .sameSite("None")
-                .httpOnly(true)
-                .build();
-
-        response.setHeader("Set-Cookie", cookie.toString());
+    private void setRefreshTokenHeader(HttpServletResponse response, User user) {
+        jwtTokenProvider.createRefreshToken(user, response);
     }
 }

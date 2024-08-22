@@ -33,7 +33,7 @@ public class User {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "password", length = 200, nullable = false)
+    @Column(name = "password", length = 200)
     private String password;
 
     @Column(name = "nickname", length = 30, nullable = false)
@@ -46,6 +46,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
     private Provider provider;
+
+    @Column(name = "social_id")
+    private String socialId;
 
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified;
@@ -67,24 +70,21 @@ public class User {
 
     @Builder
     public User(String email, String name, String password, String nickname, Role role, Provider provider,
-                Boolean isVerified, String profileImage, Boolean allowContact, Long careerYear, String association,
-                String part) {
+                String socialId, Boolean isVerified, String profileImage, Boolean allowContact, Long careerYear,
+                String association, String part) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.provider = provider;
+        this.socialId = socialId;
         this.isVerified = isVerified;
         this.profileImage = profileImage;
         this.allowContact = allowContact;
         this.careerYear = careerYear;
         this.association = association;
         this.part = part;
-    }
-
-    public String getRoleKey() {
-        return this.role.getKey();
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
