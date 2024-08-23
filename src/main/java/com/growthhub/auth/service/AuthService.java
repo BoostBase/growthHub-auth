@@ -2,7 +2,6 @@ package com.growthhub.auth.service;
 
 import static com.growthhub.auth.exception.errorcode.UserErrorCode.DUPLICATION_EMAIL;
 
-import com.growthhub.auth.domain.User;
 import com.growthhub.auth.dto.request.SignInRequest;
 import com.growthhub.auth.dto.request.SignUpRequest;
 import com.growthhub.auth.dto.response.AccessTokenResponse;
@@ -36,10 +35,7 @@ public class AuthService {
             throw new DuplicatedEmailException(DUPLICATION_EMAIL);
         }
 
-        User newUser = signUpRequest.toUser();
-        newUser.encodePassword(passwordEncoder);
-
-        userRepository.save(newUser);
+        userRepository.save(signUpRequest.toUser(passwordEncoder));
     }
 
     @Transactional

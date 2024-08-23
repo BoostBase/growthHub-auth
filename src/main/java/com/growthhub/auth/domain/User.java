@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Table(name = "users")
 @Getter
@@ -85,9 +84,5 @@ public class User {
         this.careerYear = careerYear;
         this.association = association;
         this.part = part;
-    }
-
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
     }
 }

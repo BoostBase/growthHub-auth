@@ -5,6 +5,7 @@ import com.growthhub.auth.domain.type.Provider;
 import com.growthhub.auth.domain.type.Role;
 import com.growthhub.auth.util.EnumValid;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record SignUpRequest(
         @NotNull String email,
@@ -14,11 +15,11 @@ public record SignUpRequest(
         @NotNull String part,
         @EnumValid(enumClass = Role.class) String role
 ) {
-    public User toUser() {
+    public User toUser(PasswordEncoder passwordEncoder) {
         return User.builder()
                 .email(email)
                 .name(name)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .role(Role.valueOf(role))
                 .allowContact(false)

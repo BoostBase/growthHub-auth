@@ -103,7 +103,7 @@ public class JwtTokenProvider {
 
         String refreshToken = builder.compact();
 
-        ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
+        ResponseCookie cookie = ResponseCookie.from("REFRESH_TOKEN", refreshToken)
                 .maxAge(jwtProperties.refreshTokenExpiration() / 1000)
                 .path("/")
                 .secure(true)
