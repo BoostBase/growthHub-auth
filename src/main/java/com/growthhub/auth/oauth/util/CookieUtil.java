@@ -1,5 +1,6 @@
 package com.growthhub.auth.oauth.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,7 +50,12 @@ public class CookieUtil {
     }
 
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-        return cls.cast(SerializationUtils.deserialize(
-                Base64.getUrlDecoder().decode(cookie.getValue())));
+        try {
+            String json = new String(Base64.getUrlDecoder().decode(cookie.getValue()));
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(json, cls);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deserialize cookie value", e);
+        }
     }
 }
