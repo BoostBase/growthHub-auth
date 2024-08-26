@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,11 +48,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException e,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
-        return handleExceptionInternal(e, GlobalErrorCode.INVALID_PARAMETER);
+            @NonNull MethodArgumentNotValidException e,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
+        return handleExceptionInternal(e);
     }
 
     /**
@@ -59,10 +60,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-            HttpRequestMethodNotSupportedException e,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+            @NonNull HttpRequestMethodNotSupportedException e,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
         return handleExceptionInternal(GlobalErrorCode.INVALID_METHOD);
     }
 
@@ -94,12 +95,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
     }
 
-    private ResponseEntity<Object> handleExceptionInternal(BindException e, ErrorCode errorCode) {
-        return ResponseEntity.status(errorCode.getHttpStatus())
-                .body(makeErrorResponse(e, errorCode));
+    private ResponseEntity<Object> handleExceptionInternal(BindException e) {
+        return ResponseEntity.status(GlobalErrorCode.INVALID_PARAMETER.getHttpStatus())
+                .body(makeErrorResponse(e));
     }
 
-    private ErrorResponse makeErrorResponse(BindException e, ErrorCode errorCode) {
+    private ErrorResponse makeErrorResponse(BindException e) {
         final List<ValidationError> validationErrorList = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -108,8 +109,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ErrorResponse.builder()
                 .isSuccess(false)
-                .code(errorCode.name())
-                .message(errorCode.getMessage())
+                .code(GlobalErrorCode.INVALID_PARAMETER.name())
+                .message(GlobalErrorCode.INVALID_PARAMETER.getMessage())
                 .results(new ValidationErrors(validationErrorList))
                 .build();
     }

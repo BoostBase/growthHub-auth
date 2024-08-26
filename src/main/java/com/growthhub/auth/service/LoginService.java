@@ -33,12 +33,10 @@ public class LoginService {
 
         //토큰 생성 후 리턴
         String accessToken = jwtTokenProvider.createAccessToken(user);
-        setRefreshTokenHeader(response, user);
+        jwtTokenProvider.createRefreshToken(user, response);
+
+        response.setHeader("Authorization", accessToken);
 
         return accessToken;
-    }
-
-    private void setRefreshTokenHeader(HttpServletResponse response, User user) {
-        jwtTokenProvider.createRefreshToken(user, response);
     }
 }

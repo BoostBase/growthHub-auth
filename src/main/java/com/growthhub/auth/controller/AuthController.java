@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,23 +34,32 @@ public class AuthController {
 
     @Operation(summary = "자체 회원가입 진행", description = "자체 회원가입 진행")
     @PostMapping("/sign-up")
-    public ResponseTemplate<Object> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<ResponseTemplate<?>> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+
         authService.signUp(signUpRequest);
-        return ResponseTemplate.EMPTY_RESPONSE;
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
     @Operation(summary = "로그인 진행", description = "access token은 response로 전달, refresh token은 쿠키로 전달")
     @PostMapping("/sign-in")
-    public ResponseTemplate<Object> signIn(
-            @RequestBody SignInRequest signInRequest,
-            HttpServletResponse response
-    ) {
-        return ResponseTemplate.from(authService.signIn(signInRequest, response));
+    public ResponseEntity<ResponseTemplate<?>> signIn(
+            @RequestBody SignInRequest signInRequest, HttpServletResponse response) {
+
+        authService.signIn(signInRequest, response);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
     @Operation(summary = "access token 재발급", description = "access token 재발급")
     @PostMapping("/reissue")
-    public ResponseTemplate<Object> reIssueToken(@CookieValue String refreshToken) {
-        return ResponseTemplate.from(authService.reIssueToken(refreshToken));
+    public ResponseEntity<ResponseTemplate<?>> reIssueToken(@CookieValue String refreshToken) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(authService.reIssueToken(refreshToken)));
     }
 }

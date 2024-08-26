@@ -44,8 +44,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String accessToken = tokenProvider.createAccessToken(oAuth2User);
         tokenProvider.createRefreshToken(oAuth2User, response);
 
+        response.setHeader("Authorization", accessToken);
+
         return UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam("accessToken", accessToken)
                 .build().toUriString();
     }
 }
