@@ -22,7 +22,7 @@ public class LoginService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String login(String email, String password, HttpServletResponse response) {
+    public void login(String email, String password, HttpServletResponse response) {
 
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
@@ -35,8 +35,6 @@ public class LoginService {
         String accessToken = jwtTokenProvider.createAccessToken(user);
         jwtTokenProvider.createRefreshToken(user, response);
 
-        response.setHeader("Authorization", accessToken);
-
-        return accessToken;
+        response.setHeader("Authorization", "Bearer " + accessToken);
     }
 }

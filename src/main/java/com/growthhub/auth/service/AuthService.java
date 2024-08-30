@@ -2,10 +2,12 @@ package com.growthhub.auth.service;
 
 import static com.growthhub.auth.exception.errorcode.UserErrorCode.DUPLICATION_EMAIL;
 
+import com.growthhub.auth.domain.User;
 import com.growthhub.auth.dto.request.SignInRequest;
 import com.growthhub.auth.dto.request.SignUpRequest;
-import com.growthhub.auth.dto.response.AccessTokenResponse;
 import com.growthhub.auth.exception.DuplicatedEmailException;
+import com.growthhub.auth.exception.TokenNotValidException;
+import com.growthhub.auth.exception.errorcode.AuthErrorCode;
 import com.growthhub.auth.repository.UserRepository;
 import com.growthhub.auth.util.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,17 +40,22 @@ public class AuthService {
         userRepository.save(signUpRequest.toUser(passwordEncoder));
     }
 
-    @Transactional
-    public AccessTokenResponse signIn(SignInRequest signUpRequest, HttpServletResponse response) {
+    public void signIn(SignInRequest signUpRequest, HttpServletResponse response) {
 
-        String accessToken = loginService.login(signUpRequest.email(), signUpRequest.password(), response);
-
-        return AccessTokenResponse.from(accessToken);
+        loginService.login(signUpRequest.email(), signUpRequest.password(), response);
     }
 
-    public AccessTokenResponse reIssueToken(String refreshToken) {
-        String accessToken = jwtTokenProvider.createAccessToken(jwtTokenProvider.getUser(refreshToken));
+    public void reIssueToken(String refreshToken, HttpServletResponse response) {
 
-        return AccessTokenResponse.from(accessToken);
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new TokenNotValidException(AuthErrorCode.TOKEN_NOT_VALID);
+        }
+
+        User user = jwtTokenProvider.getUser(refreshToken);
+
+        String accessToken = jwtTokenProvider.createAccessToken(user);
+        jwtTokenProvider.createRefreshToken(user, response);
+
+        response.setHeader("Authorization", "Bearer " + accessToken);
     }
 }

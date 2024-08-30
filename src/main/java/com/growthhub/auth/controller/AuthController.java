@@ -43,7 +43,7 @@ public class AuthController {
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
-    @Operation(summary = "로그인 진행", description = "access token은 response로 전달, refresh token은 쿠키로 전달")
+    @Operation(summary = "로그인 진행", description = "access token은 header에 Authorization: Bearer 로, refresh token은 쿠키로 전달")
     @PostMapping("/sign-in")
     public ResponseEntity<ResponseTemplate<?>> signIn(
             @RequestBody SignInRequest signInRequest, HttpServletResponse response) {
@@ -55,11 +55,15 @@ public class AuthController {
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
-    @Operation(summary = "access token 재발급", description = "access token 재발급")
-    @PostMapping("/reissue")
-    public ResponseEntity<ResponseTemplate<?>> reIssueToken(@CookieValue String refreshToken) {
+    @Operation(summary = "access token 재발급", description = "access token 재발급 및 refresh token 갱신")
+    @GetMapping("/reissue")
+    public ResponseEntity<ResponseTemplate<?>> reIssueToken(
+            @CookieValue(name = "REFRESH_TOKEN") String refreshToken, HttpServletResponse response) {
+
+        authService.reIssueToken(refreshToken, response);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ResponseTemplate.from(authService.reIssueToken(refreshToken)));
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 }

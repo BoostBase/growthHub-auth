@@ -1,6 +1,7 @@
 package com.growthhub.auth.exception.handler;
 
 import com.growthhub.auth.exception.DuplicatedEmailException;
+import com.growthhub.auth.exception.TokenNotValidException;
 import com.growthhub.auth.exception.UserNotFoundException;
 import com.growthhub.auth.exception.errorcode.ErrorCode;
 import com.growthhub.auth.exception.errorcode.GlobalErrorCode;
@@ -25,6 +26,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFound(UserNotFoundException e) {
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(TokenNotValidException.class)
+    public ResponseEntity<Object> handleTokenNotValid(TokenNotValidException e) {
         return handleExceptionInternal(e.getErrorCode());
     }
 
