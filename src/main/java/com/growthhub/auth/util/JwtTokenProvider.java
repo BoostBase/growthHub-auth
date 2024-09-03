@@ -59,7 +59,7 @@ public class JwtTokenProvider {
                 .maxAge(jwtProperties.refreshTokenExpiration() / 1000)
                 .path("/")
                 .secure(true)
-                .sameSite("Lax")
+                .sameSite("None")
                 .httpOnly(true)
                 .build();
 
