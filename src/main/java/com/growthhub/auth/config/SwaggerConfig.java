@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
         info = @Info(title = "Growth Hub API 명세서",
                 description = "인증 서비스",
                 version = "v1"),
-        servers = @Server(url = "/api/auth-service"))
+        servers = @Server(url = "/api/auth"))
 @Configuration
 public class SwaggerConfig {
 
