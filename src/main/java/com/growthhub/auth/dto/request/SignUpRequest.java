@@ -29,6 +29,7 @@ public record SignUpRequest(
                 .careerYear(0L)
                 .isVerified(false)
                 .profileImage(null)
+                .isOnboarded(false)
                 .build();
     }
 }

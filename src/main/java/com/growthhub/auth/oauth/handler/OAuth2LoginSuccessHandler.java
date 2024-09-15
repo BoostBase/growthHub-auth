@@ -1,6 +1,8 @@
 package com.growthhub.auth.oauth.handler;
 
+import com.growthhub.auth.domain.User;
 import com.growthhub.auth.oauth.dto.CustomOAuth2User;
+import com.growthhub.auth.repository.UserRepository;
 import com.growthhub.auth.util.JwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,7 +22,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     @Value("${app.oauth2.successRedirectUri}")
     private String redirectUri;
+    @Value("${app.onboarding.uri}")
+    private String onboardingUri;
+
     private final JwtTokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -45,6 +51,12 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         tokenProvider.createRefreshToken(oAuth2User, response);
 
         response.setHeader("Authorization", "Bearer " + accessToken);
+
+        // isOnboarded 체크
+        redirectUri = userRepository.findById(oAuth2User.getUserId())
+                .filter(User::getIsOnboarded)
+                .map(user -> redirectUri)   // isOnboarded가 true일 때 리다이렉트할 URL
+                .orElse(onboardingUri);     // isOnboarded가 false일 때 리다이렉트할 URL
 
         return UriComponentsBuilder.fromUriString(redirectUri)
                 .build().toUriString();

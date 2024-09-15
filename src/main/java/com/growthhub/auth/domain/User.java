@@ -67,10 +67,13 @@ public class User {
     @Column(name = "part", nullable = false)
     private String part;
 
+    @Column(name = "is_onboarded", nullable = false)
+    private Boolean isOnboarded;
+
     @Builder
     public User(String email, String name, String password, String nickname, Role role, Provider provider,
                 String socialId, Boolean isVerified, String profileImage, Boolean allowContact, Long careerYear,
-                String association, String part) {
+                String association, String part, Boolean isOnboarded) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -84,5 +87,6 @@ public class User {
         this.careerYear = careerYear;
         this.association = association;
         this.part = part;
+        this.isOnboarded = isOnboarded;
     }
 }

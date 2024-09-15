@@ -44,6 +44,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("adminPassword"))
                     .nickname("관리자")
                     .part("관리자")
+                    .isOnboarded(true)
                     .build();
 
             User DUMMY_MENTOR1 = User.builder()
@@ -59,6 +60,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("mentorPassword"))
                     .nickname("DB 킹")
                     .part("데이터베이스")
+                    .isOnboarded(true)
                     .build();
             User DUMMY_MENTOR2 = User.builder()
                     .email("mentor2@gmail.com")
@@ -72,6 +74,7 @@ public class UserInitializer implements ApplicationRunner {
                     .provider(Provider.SELF)
                     .password(passwordEncoder.encode("mentorPassword"))
                     .nickname("홍박사")
+                    .isOnboarded(true)
                     .part("OS")
                     .build();
             User DUMMY_MENTOR3 = User.builder()
@@ -87,6 +90,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("mentorPassword"))
                     .nickname("명퇴자")
                     .part("전자 회로")
+                    .isOnboarded(true)
                     .build();
             User DUMMY_MENTOR4 = User.builder()
                     .email("mentor4@gmail.com")
@@ -101,6 +105,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("mentorPassword"))
                     .nickname("멘토 김")
                     .part("OS")
+                    .isOnboarded(true)
                     .build();
             User DUMMY_MENTOR5 = User.builder()
                     .email("mentor5@gmail.com")
@@ -115,6 +120,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("mentorPassword"))
                     .nickname("익수플로러")
                     .part("C언어")
+                    .isOnboarded(true)
                     .build();
 
             User DUMMY_MENTEE = User.builder()
@@ -129,6 +135,7 @@ public class UserInitializer implements ApplicationRunner {
                     .password(passwordEncoder.encode("menteePassword"))
                     .nickname("백엔드 지망생")
                     .part("백엔드")
+                    .isOnboarded(false)
                     .build();
 
             userList.add(DUMMY_ADMIN);
