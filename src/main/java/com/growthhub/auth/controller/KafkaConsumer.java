@@ -1,6 +1,6 @@
 package com.growthhub.auth.controller;
 
-import com.growthhub.auth.dto.response.OnboardingCompleteDto;
+import com.growthhub.auth.dto.response.OnboardingCompleteResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "test", groupId = "growth-hub-group1")
-    public void consume(@Payload OnboardingCompleteDto message){
+    @KafkaListener(topics = "onboarding-ok", groupId = "auth-service")
+    public void consume(@Payload OnboardingCompleteResponse message){
         log.info("user-id: {}", message.userId());
     }
 }
