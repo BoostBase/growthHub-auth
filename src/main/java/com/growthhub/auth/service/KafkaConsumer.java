@@ -1,4 +1,4 @@
-package com.growthhub.auth.controller;
+package com.growthhub.auth.service;
 
 import com.growthhub.auth.dto.response.OnboardingCompleteResponse;
 import com.growthhub.auth.repository.UserRepository;
