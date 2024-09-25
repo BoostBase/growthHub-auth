@@ -2,6 +2,7 @@ package com.growthhub.auth.repository;
 
 import com.growthhub.auth.domain.User;
 import com.growthhub.auth.domain.type.Provider;
+import com.growthhub.auth.domain.type.Role;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,6 +17,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByProviderAndSocialId(Provider provider, String socialId);
 
     @Modifying(clearAutomatically = true)
-    @Query("update User u set u.isOnboarded = true where u.id = :id")
-    void updateUserByIsOnboarded(Long id);
+    @Query("update User u set u.isOnboarded = true, u.role = :role where u.id = :id")
+    void updateUserByIsOnboarded(Long id, Role role);
 }

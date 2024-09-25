@@ -20,6 +20,6 @@ public class KafkaConsumer {
     @KafkaListener(topics = "onboarding-ok", groupId = "auth-service")
     public void consume(@Payload OnboardingCompleteResponse message){
         log.info("user-id: {}", message.userId());
-        userRepository.updateUserByIsOnboarded(message.userId());
+        userRepository.updateUserByIsOnboarded(message.userId(), message.role());
     }
 }
