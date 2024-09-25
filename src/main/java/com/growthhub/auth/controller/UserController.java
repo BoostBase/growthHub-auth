@@ -1,7 +1,7 @@
 package com.growthhub.auth.controller;
 
-import com.growthhub.auth.dto.response.MentorResponse;
-import com.growthhub.auth.service.MentorService;
+import com.growthhub.auth.dto.response.UserResponse;
+import com.growthhub.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,16 +15,16 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class MentorController {
+public class UserController {
 
-    private final MentorService mentorService;
+    private final UserService userService;
 
-    @GetMapping("/mentors")
-    public ResponseEntity<List<MentorResponse>> getMentors(
-            @RequestParam("mentorIds") List<Long> mentorIds
+    @GetMapping("/users")
+    public ResponseEntity<List<UserResponse>> getUsers(
+            @RequestParam("userIds") List<Long> userIds
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(mentorService.getMentors(mentorIds));
+                .body(userService.getUsers(userIds));
     }
 }
