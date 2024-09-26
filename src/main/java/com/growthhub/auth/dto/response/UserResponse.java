@@ -4,8 +4,8 @@ import com.growthhub.auth.domain.User;
 import lombok.Builder;
 
 @Builder
-public record MentorResponse(
-        Long mentorId,
+public record UserResponse(
+        Long userId,
         String name,
         String nickname,
         String profileImageUrl,
@@ -14,9 +14,9 @@ public record MentorResponse(
         String part
 ) {
 
-    public static MentorResponse from(User user) {
-        return MentorResponse.builder()
-                .mentorId(user.getId())
+    public static UserResponse from(User user) {
+        return UserResponse.builder()
+                .userId(user.getId())
                 .name(user.getName())
                 .nickname(user.getNickname())
                 .profileImageUrl(user.getProfileImage())
