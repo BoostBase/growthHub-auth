@@ -1,5 +1,6 @@
 package com.growthhub.auth.service;
 
+import com.growthhub.auth.dto.response.MentorOnboardingKafkaResponse;
 import com.growthhub.auth.dto.response.OnboardingCompleteResponse;
 import com.growthhub.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,17 @@ public class KafkaConsumer {
     private final UserRepository userRepository;
 
     @Transactional
-    @KafkaListener(topics = "onboarding-ok", groupId = "auth-service")
-    public void consume(@Payload OnboardingCompleteResponse message){
+    @KafkaListener(topics = "onboarding-mentee-ok", groupId = "auth-service")
+    public void consumeMenteeOnboarding(@Payload OnboardingCompleteResponse message) {
         log.info("user-id: {}", message.userId());
         userRepository.updateUserByIsOnboarded(message.userId(), message.role());
+    }
+
+    @Transactional
+    @KafkaListener(topics = "onboarding-mentor-ok", groupId = "auth-service")
+    public void consumeMentorOnboarding(@Payload MentorOnboardingKafkaResponse message) {
+        log.info("user-id: {}", message.userId());
+        userRepository.updateMentorWithOnboarding(
+                message.userId(), message.association(), message.part(), message.careerYear());
     }
 }

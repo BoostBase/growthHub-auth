@@ -23,6 +23,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("update User u set u.isOnboarded = true, u.role = :role where u.id = :id")
     void updateUserByIsOnboarded(Long id, Role role);
 
+    @Modifying(clearAutomatically = true)
+    @Query("update User u "
+            + "set u.isOnboarded = true, u.role = 'Mentor', "
+            + "u.association = :association, u.part = :part, u.careerYear = :careerYear "
+            + "where u.id = :id")
+    void updateMentorWithOnboarding(Long id, String association, String part, Long careerYear);
+
     @Query("SELECT u FROM User u WHERE u.id in :ids")
     List<User> findByIds(@Param("ids") List<Long> ids);
 }
