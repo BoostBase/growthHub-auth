@@ -64,7 +64,7 @@ public record OAuthAttributes(
                 .profileImage(oauth2UserInfo.getProfileImage())
                 .provider(oauth2UserInfo.getOAuthProvider())
                 .nickname(oauth2UserInfo.getNickname())
-                .part("OS")
+                .part("")
                 .isOnboarded(false)
                 .build();
     }
