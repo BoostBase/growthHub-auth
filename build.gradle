@@ -48,9 +48,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-	//kafka
-	implementation 'org.springframework.kafka:spring-kafka'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 dependencyManagement {
