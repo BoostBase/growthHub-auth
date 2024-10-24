@@ -23,10 +23,12 @@ public class UserService {
         return users.stream().map(UserResponse::from).toList();
     }
 
+    @Transactional
     public void menteeOnboarding(Long userId, Role role) {
         userRepository.updateUserByIsOnboarded(userId, role);
     }
 
+    @Transactional
     public void mentorOnboarding(Long userId, String association, String part, Long careerYear) {
         userRepository.updateMentorWithOnboarding(userId, association, part, careerYear);
     }
